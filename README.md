@@ -1,1 +1,2 @@
 - Instalar confetti: npm install canvas-confetti -E
+- Instalar standard js: npm i standard -D
