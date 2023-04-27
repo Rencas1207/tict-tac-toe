@@ -5,6 +5,8 @@ import { TURNS } from './constants';
 import { checkEndGame, checkWinnerFrom } from './logic/board';
 import WinnerModal from './components/WinnerModal';
 import Board from './components/Board';
+import { useEffect } from 'react';
+import { resetGameToStorage, saveGameToStorage } from './logic/storage';
 
 function App() {
 
@@ -14,6 +16,7 @@ function App() {
       ? JSON.parse(boardFromStorage)
       : Array(9).fill(null)
   });
+
   const [turn, setTurn] = useState(() => {
     const turnFromStorage = window.localStorage.getItem('turn');
     return turnFromStorage ?? TURNS.X
@@ -26,9 +29,12 @@ function App() {
     setTurn(TURNS.X);
     setWinner(null);
 
-    window.localStorage.removeItem('board')
-    window.localStorage.removeItem('turn')
+    resetGameToStorage();
   }
+
+  useEffect(() => {
+
+  }, [turn, board])
 
 
   const updateBoard = (index) => {
@@ -41,9 +47,10 @@ function App() {
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
     setTurn(newTurn);
 
-    // guardar aquí partida
-    window.localStorage.setItem('board', JSON.stringify(newBoard));
-    window.localStorage.setItem('turn', newTurn);
+    saveGameToStorage({
+      board: newBoard,
+      turn: newTurn
+    })
 
     // revisar si hay ganador
     const newWinner = checkWinnerFrom(newBoard);
