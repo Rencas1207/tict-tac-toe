@@ -1,0 +1,1 @@
+- Instalar confetti: npm install canvas-confetti -E
